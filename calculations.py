@@ -29,9 +29,15 @@ model.printString()
 chain = [0, 1, 2, 0, 1, 2, 0, 1, 2]
 noteGroups = ["A B C D A B C D E E", "E A G D E A G D E D E D", "E E D E D E G E"] 
 
-
 def calculate(chain, noteGroups):
-    options = HMM.viterbi(noteGroups, chain, model)
+    chordNums = HMM.calculate(noteGroups, chain, model)
+
+    sequence = []
+
+    for chord in chain:
+        sequence.append(chordNums[chord])
+
+    """options = HMM.viterbi(noteGroups, chain, model)
 
     max = 0
 
@@ -47,7 +53,7 @@ def calculate(chain, noteGroups):
         nextChord = options[chord-1][current][1]
         sequence.append(nextChord)
         current = nextChord
-    
+    """
     return sequence
 
 sequence = calculate(chain, noteGroups)

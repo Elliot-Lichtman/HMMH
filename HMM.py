@@ -118,6 +118,67 @@ def copyDict(dict):
         newDict[item] = dict[item]
     return newDict
 
+def permute(arr):
+
+    if arr == []:
+        return [[]]
+    
+    oneLessPermutations = permute(arr[1:])
+    permutations = []
+    for option in oneLessPermutations:
+        for insertSpace in range(len(option)):
+            newVersion = copyList(option)
+            newVersion.insert(insertSpace, arr[0])
+            permutations.append(copyList(newVersion))
+        newVersion = copyList(option)
+        newVersion.append(arr[0])
+        permutations.append(copyList(newVersion))
+    
+    return permutations
+
+def calculate(noteGroups, chain, model):
+
+    chords = {}
+    for chordNum in chain:
+        chords[chordNum] = ""
+    
+    chordList = []
+    for key in model.states:
+        chordList.append(key.name)
+    
+    options = permute(chordList)
+
+    max = 0
+    maxPattern = []
+
+    for option in options:
+        odds = 1
+        dict = {}
+        for i in range(len(option)):
+            for state in model.states:
+                if state.name == option[i]:
+                    dict[i] = state
+
+        for notes in range(len(noteGroups)):
+            odds *= dict[notes].calculateOdds(noteGroups[notes])
+        
+        prev = None
+        current = None
+        for link in chain:
+            current = dict[link]
+
+            if prev != None:
+                odds *= prev.connections[dict[link]]
+        
+
+        if odds >= max:
+            max = odds
+            maxPattern = option
+    
+    return maxPattern
+
+
+
 def viterbi(noteGroups, chain, model):
     odds = []
 
@@ -163,6 +224,8 @@ def viterbi(noteGroups, chain, model):
                 try:
                     for key in decided:
                         if decided[key] == state.name and key != chain[link]:
+                            approved = False
+                        if key == chain[link] and decided[key] != state.name:
                             approved = False
                 except:
                     pass
