@@ -21,6 +21,7 @@ import pygame
 import numpy as np
 import time
 import math
+import calculations
 
 notesList = ['C0', 'C#0', 'D0', 'D#0', 'E0', 'F0', 'F#0', 'G0', 'G#0', 'A0', 'A#0', 'B0', 'C1', 'C#1', 'D1', 'D#1', 'E1', 'F1', 'F#1', 'G1', 'G#1', 'A1', 'A#1', 'B1', 'C2', 'C#2', 'D2', 'D#2', 'E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2', 'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5', 'C6', 'C#6', 'D6', 'D#6', 'E6', 'F6', 'F#6', 'G6', 'G#6', 'A6', 'A#6', 'B6', 'C7', 'C#7', 'D7', 'D#7', 'E7', 'F7', 'F#7', 'G7', 'G#7', 'A7', 'A#7', 'B7', 'C8', 'C#8', 'D8', 'D#8', 'E8', 'F8', 'F#8', 'G8', 'G#8', 'A8', 'A#8', "B8", "C9"]
 
@@ -67,7 +68,7 @@ def releaseNote(note):
     if note[0] == "k":
         notes["a" + str(int(note[1])+1)][3] = 0
 
-print(len(notesList))
+#print(len(notesList))
 
 firstFreq = 16.3516
 
@@ -244,7 +245,7 @@ def buildChord(root, tonality):
 
     chord.append(0)
     chord.append(upperRoot + tonality)
-    print(upperRoot + tonality)
+    #print(upperRoot + tonality)
     return chord
 
 
@@ -284,7 +285,7 @@ def setChordList(chordList):
                             if key in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]:
                                 stage += 1
                                 keyToEdit = key
-                                print(keyToEdit)
+                                #print(keyToEdit)
                         except:
                             pass
             if event.type == pygame.MOUSEBUTTONUP:
@@ -293,14 +294,14 @@ def setChordList(chordList):
                     for i in range(len(positions)):
                         if (math.sqrt((pos[0] - positions[i][0])**2 + (pos[1] - positions[i][1])**2)) < 50:
                             root = roots[i]
-                            print(root)
+                            #print(root)
                             stage += 1
                 if stage == 2:
                     pos = pygame.mouse.get_pos()
                     for i in range(len(typePositions)):
                         if (math.sqrt((pos[0] - typePositions[i][0]) ** 2 + (pos[1] - typePositions[i][1]) ** 2)) < 50:
                             tonality = types[i]
-                            print(tonality)
+                            #print(tonality)
                             stage += 1
                             selected = True
 
@@ -322,8 +323,8 @@ def setChordList(chordList):
         newChord.append(chord[-2])
         newChord.append(chord[-1])
         chordList[str(keyToEdit)+str(i)] = newChord
-        print(str(keyToEdit)+str(i))
-        print(chordList[str(keyToEdit)+str(i)])
+        #print(str(keyToEdit)+str(i))
+        #print(chordList[str(keyToEdit)+str(i)])
 
     return chordList
 
@@ -377,20 +378,7 @@ def resetChordList():
         chordList["0" + str(num)] = ["a" + str(num), "e" + str(num), "g" + str(num), "u" + str(num), 0, "Cm7"]
     return chordList
 
-def setBrunoChordList():
-    chordList = {}
-    for num in range(8):
-        chordList["1" + str(num)] = ["a" + str(num), "e" + str(num), "g" + str(num), 0, "Cm"]
-        chordList["2" + str(num)] = ["f" + str(num), "y" + str(num), "a" + str(num), 0, "Fm"]
-        chordList["3" + str(num)] = ["g" + str(num), "f" + str(num), "s" + str(num), "j" + str(num), 0, "G7"]
-        chordList["4" + str(num)] = ["e" + str(num), "y" + str(num), "a" + str(num), 0, "G#M"]
-        chordList["5" + str(num)] = ["e" + str(num), "g" + str(num), "u" + str(num), 0, "D#M"]
-        chordList["6" + str(num)] = ["u" + str(num), "s" + str(num), "f" + str(num), 0, "A#M"]
-        chordList["7" + str(num)] = ["a" + str(num), "e" + str(num), "g" + str(num), 0, "Cm"]
-        chordList["8" + str(num)] = ["d" + str(num), "g" + str(num), "k" + str(num), 0, "C1"]
-        chordList["9" + str(num)] = ["s" + str(num), "f" + str(num), "g" + str(num), 0, "GM"]
-        chordList["0" + str(num)] = ["a" + str(num), "e" + str(num), "g" + str(num), "u" + str(num), 0, "Cm7"]
-    return chordList
+
 
 def createKeyboard():
     genericChordPattern = [[False, ['chord', '14', True, 0.0]], [False, ['chord', '14', False, 0.541933536529541]], [False, ['chord', '14', True, 0.6801412105560303]], [False, ['chord', '14', False, 1.207319974899292]], [False, ['chord', '14', True, 1.3547108173370361]], [False, ['chord', '14', False, 1.6923773288726807]], [False, ['chord', '24', True, 1.8457469940185547]], [False, ['chord', '24', False, 2.454789400100708]], [False, ['chord', '24', True, 2.547321081161499]], [False, ['chord', '24', False, 3.0336382389068604]], [False, ['chord', '24', True, 3.2014811038970947]], [False, ['chord', '24', False, 3.5181314945220947]], [False, ['chord', '34', True, 3.6679482460021973]], [False, ['chord', '34', False, 4.207616806030273]], [False, ['chord', '34', True, 4.340531826019287]], [False, ['chord', '34', False, 4.893650054931641]], [False, ['chord', '34', True, 5.022843599319458]], [False, ['chord', '34', False, 5.344620704650879]], [False, ['chord', '44', True, 5.501351356506348]], [False, ['chord', '44', False, 6.003986597061157]], [False, ['chord', '44', True, 6.2257819175720215]], [False, ['chord', '44', False, 6.740588665008545]], [False, ['chord', '44', True, 6.894794702529907]], [False, ['chord', '44', False, 7.242648124694824]]]
@@ -424,6 +412,9 @@ def createKeyboard():
     #DEFAULT CHORD LIST
     chordList = resetChordList()
 
+    chain = []
+    noteGroups = []
+
     chordKeys = "1234567890"
     keylist = 'awsedftgyhuj'
     modifiers = [pygame.K_LEFT, pygame.K_RIGHT]
@@ -435,6 +426,9 @@ def createKeyboard():
     music = []
     first = True
     looping = False
+
+    HMM = False
+
     while True:
         #print(prevMusic)
         current = time.time()
@@ -443,7 +437,7 @@ def createKeyboard():
             for i in range(36, len(notesList)-1-24):
                 mod = int(i/12)
                 key = keylist[i-mod*12]+str(mod)
-                print(notesList[i])
+                #print(notesList[i])
                 freq = firstFreq * 2 ** (((1/12)) * i)
                 sample = makeNote(freq)
                 notes[key] = [sample, notesList[i], freq, 0]
@@ -473,11 +467,21 @@ def createKeyboard():
                     #print(chordList)
                     chordList = setChordList(chordList)
                     #print(chordList)
+                elif event.key == pygame.K_c:
+                    if HMM:
+                        chordSequence = calculations.calculate(chain, noteGroups)
+                        print(chordSequence)
+                        HMM = False
+                    
+                    else:
+                        chain = []
+                        noteGroups = []
+                        currentChord = ""
+                        HMM = True
+
                 elif event.key == pygame.K_n:
                     chordList = resetChordList()
-                elif event.key == pygame.K_b:
-                    prevMusic = brunoBase
-                    chordList = setBrunoChordList()
+                
                 elif event.key == pygame.K_m:
                     prevMusic = genericChordPattern
                 elif event.key == pygame.K_r:
@@ -545,6 +549,11 @@ def createKeyboard():
 
                     elif str(event.unicode) in keylist:
                         key = str(event.unicode)
+                        if HMM:
+                            try:
+                                noteGroups[currentChord] += " " + key
+                            except:
+                                noteGroups.append(key)
                         try:
                             #print(notes[key + str(octave)][1])
                             #notes[key + str(octave)][0].play()
@@ -555,10 +564,14 @@ def createKeyboard():
                                     newStart = time.time()
                                 music.append(["note", key + str(octave), True, time.time() - newStart])
                         except:
-                            print("not in dictionary")
+                            pass
+                            #print("not in dictionary")
 
                     elif str(event.unicode) in chordKeys:
                         key = str(event.unicode) + str(chordOctave)
+                        if str(event.unicode) in "1234":
+                            currentChord = int(str(event.unicode))-1
+                            chain.append(currentChord)
                         #print(key)
                         try:
                             playChord(chordList[key])
@@ -570,7 +583,7 @@ def createKeyboard():
                                     newStart = time.time()
                                 music.append(["chord", key, True, time.time() - newStart])
                         except:
-                            print("not a chord")
+                            pass #print("not a chord")
             if event.type == pygame.KEYUP and event.key not in modifiers:
                 try:
                     key = str(event.unicode)+str(octave)
@@ -594,7 +607,7 @@ def createKeyboard():
 
         if playing:
             position = 0
-            print(prevMusic)
+            #print(prevMusic)
             while position < len(prevMusic) and prevMusic[position][1][3] <= time.time() - playbackStart:
                 #ready = input()
                 if not prevMusic[position][0]:

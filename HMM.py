@@ -117,7 +117,7 @@ def viterbi(noteGroups, chain, model):
 
     # make the frame for the memoization array
 
-    for state in range(len(model.states)):
+    for state in range(len(chain)):
         odds.append({})
 
     
@@ -136,11 +136,30 @@ def viterbi(noteGroups, chain, model):
     # do the "recursive" dynamic programming
 
     for state in model.states:
-        odds[-1][state.name] = noteOdds[chain[-1]][state.name]
+        odds[-1][state.name] = [noteOdds[chain[-1]][state.name], None]
     
     print(odds)
+    print()
     
-    #for link in range(len(chain)-2, -1, -1):
+    for link in range(len(chain)-2, -1, -1):
+        for state in model.states:
+            noteProb = noteOdds[chain[link]][state.name]
+
+            max = 0
+            maxNext = ""
+            for nextState in model.states:
+                option = noteProb * odds[link+1][nextState.name][0] 
+                option *= state.connections[nextState]
+                if option > max:
+                    max = option
+                    maxNext = nextState.name
+
+            odds[link][state.name] = [max, maxNext]
+
+    print(odds)
+
+    return odds
+
 
 
     
