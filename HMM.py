@@ -21,6 +21,18 @@ class State:
             string += other.name + " - " + str(self.connections[other]) + "\n"
         return string
 
+    def calculateOdds(self, notes):
+        total = 1
+        currentNote = ""
+        for letter in notes:
+            if letter == " ":
+                total *= self.notes[currentNote]
+                currentNote = ""
+            else:
+                currentNote += letter
+        total *= self.notes[currentNote]
+        return total 
+            
 class HMM:
 
     def __init__(self):
@@ -94,9 +106,48 @@ class HMM:
 
             currentLine = file.readline()
 
-model = HMM()
-model.readIn("model.txt")
-model.printString()
+def copyList(list):
+    newList = []
+    for item in list:
+        newList.append(item)
+    return newList
+
+def viterbi(noteGroups, chain, model):
+    odds = []
+
+    # make the frame for the memoization array
+
+    for state in range(len(model.states)):
+        odds.append({})
+
+    
+    # keep track of odds for each chord for each noteblock
+
+    noteOdds = []
+
+    for group in noteGroups:
+        noteOdds.append({})
+    
+    for noteGroup in range(len(noteGroups)):
+        for state in model.states:
+            noteOdds[noteGroup][state.name] = state.calculateOdds(noteGroups[noteGroup])
+    
+
+    # do the "recursive" dynamic programming
+
+    for state in model.states:
+        odds[-1][state.name] = noteOdds[chain[-1]][state.name]
+    
+    print(odds)
+    
+    #for link in range(len(chain)-2, -1, -1):
+
+
+    
+
+
+
+
 
 
         
