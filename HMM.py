@@ -112,6 +112,12 @@ def copyList(list):
         newList.append(item)
     return newList
 
+def copyDict(dict):
+    newDict = {}
+    for item in dict:
+        newDict[item] = dict[item]
+    return newDict
+
 def viterbi(noteGroups, chain, model):
     odds = []
 
@@ -136,7 +142,7 @@ def viterbi(noteGroups, chain, model):
     # do the "recursive" dynamic programming
 
     for state in model.states:
-        odds[-1][state.name] = [noteOdds[chain[-1]][state.name], None]
+        odds[-1][state.name] = [noteOdds[chain[-1]][state.name], None, {chain[-1]:state.name}]
     
     print(odds)
     print()
@@ -148,13 +154,32 @@ def viterbi(noteGroups, chain, model):
             max = 0
             maxNext = ""
             for nextState in model.states:
-                option = noteProb * odds[link+1][nextState.name][0] 
-                option *= state.connections[nextState]
-                if option > max:
-                    max = option
-                    maxNext = nextState.name
 
-            odds[link][state.name] = [max, maxNext]
+                try:
+                    decided = copyDict(odds[link+1][nextState.name][2])
+                    approved = True
+                except:
+                    approved = False
+                try:
+                    for key in decided:
+                        if decided[key] == state.name and key != chain[link]:
+                            approved = False
+                except:
+                    pass
+
+                if approved:
+                    option = noteProb * odds[link+1][nextState.name][0] 
+                    option *= state.connections[nextState]
+                    if option > max:
+                        max = option
+                        maxNext = nextState.name
+
+            try:
+                decided = copyDict(odds[link+1][maxNext][2])
+                decided[chain[link]] = state.name
+                odds[link][state.name] = [max, maxNext, decided]
+            except:
+                pass
 
     print(odds)
 

@@ -74,6 +74,17 @@ firstFreq = 16.3516
 
 notes = {}
 
+noteNameDict = {
+    "a" : "C",
+    "s" : "D",
+    "d" : "E", 
+    "f" : "F",
+    "g" : "G",
+    "h" : "A",
+    "j" : "B",
+    "k" : "C"
+}
+
 
 def drawKeyboard(notes):
     whiteKeys = 0
@@ -328,7 +339,34 @@ def setChordList(chordList):
 
     return chordList
 
+def updateChordList(sequence):
 
+    chordList = resetChordList()
+
+    usedNames = []
+
+    keyToEdit = 1
+
+    for chord in sequence:
+        chord = chord
+        if chord[-1] in "ABCDEFG":
+            chord += "M"
+    
+        if chord not in usedNames:
+            newChord = buildChord(chord[0], chord[1])
+            usedNames.append(chord)
+
+            for i in range(8):
+                nc = []
+                for j in range(len(newChord)-2):
+                    nc.append(newChord[j] + str(i))
+                nc.append(newChord[-2])
+                nc.append(newChord[-1])
+                chordList[str(keyToEdit)+str(i)] = nc
+            keyToEdit += 1
+    #print(chordList)
+    return chordList
+    
 def drawMidi(midi, distance):
     whiteKeys = ["C", "D", "E", "F", "G", "A", "B"]
     for frame in midi.keys():
@@ -469,8 +507,13 @@ def createKeyboard():
                     #print(chordList)
                 elif event.key == pygame.K_c:
                     if HMM:
+                        print(chain)
+                        print(noteGroups)
+                        
                         chordSequence = calculations.calculate(chain, noteGroups)
+                    
                         print(chordSequence)
+                        chordList = updateChordList(chordSequence)
                         HMM = False
                     
                     else:
@@ -551,9 +594,9 @@ def createKeyboard():
                         key = str(event.unicode)
                         if HMM:
                             try:
-                                noteGroups[currentChord] += " " + key
+                                noteGroups[currentChord] += " " + noteNameDict[key]
                             except:
-                                noteGroups.append(key)
+                                noteGroups.append(noteNameDict[key])
                         try:
                             #print(notes[key + str(octave)][1])
                             #notes[key + str(octave)][0].play()
@@ -569,21 +612,22 @@ def createKeyboard():
 
                     elif str(event.unicode) in chordKeys:
                         key = str(event.unicode) + str(chordOctave)
-                        if str(event.unicode) in "1234":
+                        if str(event.unicode) in "1234567890" and HMM:
                             currentChord = int(str(event.unicode))-1
                             chain.append(currentChord)
                         #print(key)
-                        try:
-                            playChord(chordList[key])
-                            chordList[key][-2] = 1
-                            #print(chordList[key])
-                            if recording:
-                                if first:
-                                    first = False
-                                    newStart = time.time()
-                                music.append(["chord", key, True, time.time() - newStart])
-                        except:
-                            pass #print("not a chord")
+                        else:
+                            try:
+                                playChord(chordList[key])
+                                chordList[key][-2] = 1
+                                #print(chordList[key])
+                                if recording:
+                                    if first:
+                                        first = False
+                                        newStart = time.time()
+                                    music.append(["chord", key, True, time.time() - newStart])
+                            except:
+                                pass #print("not a chord")
             if event.type == pygame.KEYUP and event.key not in modifiers:
                 try:
                     key = str(event.unicode)+str(octave)

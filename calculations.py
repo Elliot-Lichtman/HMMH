@@ -11,7 +11,7 @@ model.printString()
 
 # DONT STOP BELIEVING
 #chain = [0, 1, 2, 3]
-#noteGroups = ["C D E", "G A B", "A B C", "F F"]
+#noteGroups = ["C D E", "G A B", "A B C", "F G"]
 
 # WILDEST DREAMS
 #chain = [0, 1, 2, 3]
@@ -29,6 +29,7 @@ model.printString()
 chain = [0, 1, 2, 0, 1, 2, 0, 1, 2]
 noteGroups = ["A B C D A B C D E E", "E A G D E A G D E D E D", "E E D E D E G E"] 
 
+
 def calculate(chain, noteGroups):
     options = HMM.viterbi(noteGroups, chain, model)
 
@@ -37,7 +38,7 @@ def calculate(chain, noteGroups):
     sequence = [""]
 
     for key in options[0].keys():
-        if options[0][key][0] > max:
+        if options[0][key][0] >= max:
             max = options[0][key][0]
             sequence[0] = key
 
