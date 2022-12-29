@@ -9,9 +9,13 @@ model.printString()
 #chain = [0, 1, 0, 2]
 #noteGroups = ["E E E E E E E G C D E F E E E E", "F F F F", "E D D E D G"]
 
+# HEART AND SOUL 
+chain = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3]
+noteGroups = ['C C E E G C', 'C E C B A', 'C B A E E D C A G F G F', 'B C D D E F E D E D G']
+
 # DONT STOP BELIEVING
-#chain = [0, 1, 2, 3]
-#noteGroups = ["C D E", "G A B", "A B C", "F G"]
+#chain = [0, 1, 2, 3, 0, 1, 2, 3]
+#noteGroups = ['C D E C D E', 'G A B G A B', 'A B C A B C', 'F G F']
 
 # WILDEST DREAMS
 #chain = [0, 1, 2, 3]
@@ -22,12 +26,12 @@ model.printString()
 #noteGroups = ["G E G E G G E G", "A G F G F G F E C F F E C", "E D E G"]
 
 # LET IT BE
-#chain = [0, 1, 2, 3]
-#noteGroups = ["E E G G A E", "G G C D", "E E E D C", "D C C"]
+#chain = [0, 1, 0, 2, 3, 0, 1, 2, 3]
+#noteGroups = ['E E G G A E G C D E E F E E', 'G D E D', 'E E E D C C', 'D C C C']
 
 # RIPTIDE
-chain = [0, 1, 2, 0, 1, 2, 0, 1, 2]
-noteGroups = ["A B C D A B C D E E", "E A G D E A G D E D E D", "E E D E D E G E"] 
+#chain = [0, 1, 2, 0, 1, 2, 0, 1, 2]
+#noteGroups = ["A B C D A B C D E E", "E A G D E A G D E D E D", "E E D E D E G E"] 
 
 def calculate(chain, noteGroups):
     chordNums = HMM.calculate(noteGroups, chain, model)
